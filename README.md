@@ -1,76 +1,56 @@
-Bot de WhatsApp para Agendar Eventos en Google Calendar
-Este proyecto es un bot de WhatsApp de prueba que permite recibir mensajes y procesarlos para eventualmente agendar eventos en Google Calendar.
-El objetivo principal fue aprender a conectar Flask + Twilio + Google Cloud OAuth de forma básica.
+# Bot de WhatsApp para Agendar Eventos en Google Calendar
 
-Tecnologías utilizadas
-Python 3
+Este proyecto es un bot básico que recibe mensajes de WhatsApp y responde automáticamente.  
+Además, se conecta con Google Calendar para registrar eventos.
 
-Flask
+## Tecnologías utilizadas
 
-Twilio API for WhatsApp
+- Python
+- Flask
+- Twilio Sandbox para WhatsApp
+- Ngrok
+- API de Google Calendar
 
-Ngrok
+## Pasos realizados
 
-Google Cloud Console (OAuth 2.0)
+1. **Configuración del entorno:**
+   - Creación de un entorno virtual en Python.
+   - Instalación de las dependencias necesarias (`Flask`, `twilio`).
 
-Pasos que seguí
-1. Configuración inicial
-Creé un entorno virtual en Linux (python3 -m venv venv) y lo activé.
+2. **Configuración de Twilio:**
+   - Creación de cuenta gratuita en Twilio.
+   - Activación del Sandbox de WhatsApp.
+   - Configuración del webhook hacia nuestro servidor local usando ngrok.
 
-Instalé Flask y Twilio en el entorno virtual (pip install flask twilio).
+3. **Configuración de ngrok:**
+   - Instalación de ngrok.
+   - Exposición de nuestro servidor Flask local al exterior.
 
-2. Creación del bot en Flask
-Creé el archivo app.py con una ruta /whatsapp que recibe mensajes de WhatsApp.
+4. **Desarrollo básico del bot:**
+   - Creación del archivo `app.py`.
+   - Configuración de Flask para recibir y responder mensajes de WhatsApp.
 
-El bot simplemente devuelve un mensaje reconociendo lo que el usuario escribió.
+5. **Configuración de Google Cloud:**
+   - Creación de proyecto en Google Cloud Console.
+   - Configuración de pantalla de consentimiento OAuth.
+   - Creación de credenciales OAuth para permitir al bot escribir en Google Calendar.
 
-python
-Copiar
-Editar
-from flask import Flask, request
-from twilio.twiml.messaging_response import MessagingResponse
+## Estado del proyecto
 
-app = Flask(__name__)
+✅ El bot recibe mensajes por WhatsApp y responde automáticamente.  
+✅ Configurado para integrar eventos con Google Calendar (próxima etapa).
 
-@app.route('/whatsapp', methods=['POST'])
-def whatsapp_bot():
-    incoming_msg = request.values.get('Body', '').lower()
-    resp = MessagingResponse()
-    msg = resp.message()
+## Cómo correr el proyecto
 
-    msg.body(f"Recibí tu mensaje: {incoming_msg}")
+```bash
+# Crear entorno virtual
+python3 -m venv venv
 
-    return str(resp)
+# Activarlo
+source venv/bin/activate
 
-if __name__ == '__main__':
-    app.run(port=5000)
-3. Exposición local con Ngrok
-Instalé ngrok.
+# Instalar dependencias
+pip install Flask twilio
 
-Ejecuté ngrok http 5000 para generar un dominio público que redirige a mi servidor local de Flask.
-
-4. Configuración de Twilio Sandbox para WhatsApp
-Me registré en Twilio y configuré el sandbox de WhatsApp.
-
-En el Sandbox de Twilio, configuré el Webhook URL apuntando a mi dominio de ngrok más /whatsapp, por ejemplo:
-
-bash
-Copiar
-Editar
-https://a17c-181-169-243-164.ngrok-free.app/whatsapp
-Probé enviando mensajes de WhatsApp al número del sandbox y recibí respuestas automáticas del bot.
-
-5. Creación de proyecto en Google Cloud Console
-Creé un proyecto nuevo.
-
-Configuré la pantalla de consentimiento de OAuth con los datos básicos (nombre de la app y contacto).
-
-Creé un ID de Cliente OAuth 2.0 del tipo Aplicación Web.
-
-Agregué como URL de redirección autorizada la dirección de ngrok más /callback, por ejemplo:
-
-bash
-Copiar
-Editar
-https://a17c-181-169-243-164.ngrok-free.app/callback
-Guardé las credenciales para utilizarlas más adelante en la integración con Google Calendar.
+# Ejecutar la app
+python app.py
